@@ -1,0 +1,192 @@
+<?php $__env->startSection('title', 'Konversi Poin'); ?>
+    
+<?php $__env->startSection('content'); ?>
+    <section id="main-view" class="py-5 mb-4">
+        <div class="row justify-content-between">
+            <div class="col-lg-7 col-12 mt-lg-3 mt-0">
+                <h2 class="fw-bold mb-md-3 mb-2">Konversi <span class="text-yellow">Poin</span></h2>
+                <p class="mb-4">WastePoin yang Anda miliki dapat ditukarkan menjadi uang 
+                    <span class="d-xl-block d-inline">yang diproses ke rekening bank Anda dengan cepat.</span> 
+                </p>
+                <a href="#konversi" class="btn btn-green py-2 px-4 mb-lg-0 mb-5 rounded">
+                    <span class="align-middle">Lakukan konversi poin</span>
+                </a>
+            </div>
+            <div class="col-lg-5">
+                <img src="<?php echo e(asset('images/coins.jpeg')); ?>" alt="convertion-illustration" class="detail-sampah">
+            </div>
+        </div>
+    </section>
+
+    <section id="flow-view" class="py-4 mb-5">
+        <div class="text-center mb-5">
+            <h4 class="fw-bold">Alur Konversi</h4>
+            <p class="opacity-75">Alur konversi poin Anda mulai dari awal proses hingga akhir</p>
+        </div>
+        <div class="row mb-5 justify-content-center">
+            <div class="col-lg-4 col-12 mb-md-0 mb-4 text-center">
+                <img src="<?php echo e(asset('images/number-one.svg')); ?>" class="mb-3">
+                <h5 class="fw-bold">Masukkan jumlah poin</h5>
+                <p class="opacity-75">Tentukan jumlah poin yang ingin  
+                    <span class="d-xl-block d-inline">dikonversi dengan minimum penukaran</span> 
+                    <span class="d-xl-block d-inline">sebesar 50 WastePoin</span>
+                </p>
+            </div>
+            <div class="col-lg-4 col-12 mb-md-0 mb-4 text-center">
+                <img src="<?php echo e(asset('images/number-two.svg')); ?>" class="mb-3">
+                <h5 class="fw-bold">Masukkan data rekening bank</h5>
+                <p class="opacity-75">Pilih tipe bank yang menjadi tujuan konversi  
+                    <span class="d-xl-block d-inline">poin dan masukkan data rekening</span> 
+                    <span class="d-xl-block d-inline">bank dengan sesuai untuk diproses</span>
+                </p>
+            </div>
+            <div class="col-lg-4 col-12 text-center">
+                <img src="<?php echo e(asset('images/number-three.svg')); ?>" class="mb-3">
+                <h5 class="fw-bold">Konversi berhasil</h5>
+                <p class="opacity-75">Konversi poin akan diproses dengan cepat ke
+                    <span class="d-xl-block d-inline">rekening anda dengan tambahan</span> 
+                    <span class="d-xl-block d-inline">biaya admin sebesar Rp 2.500</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="konversi" class="pt-5 pb-2 mb-2">
+        <div class="mb-5 pt-5">
+            <h4 class="fw-bold text-center">Konversi poin jadi uang</h4>
+            <p class="text-center">
+                Penukaran poin akan langsung diproses dengan tambahan biaya administrasi sebesar Rp2500 berlaku untuk seluruh tipe bank.
+                <span class="d-xl-block d-inline">Kalkulasi konversi poin untuk 1 poinnya senilai <span class="text-green fw-bold">Rp1000</span>.</span>
+            </p>
+        </div>
+        <?php if(session('convert-failed')): ?>
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-12">
+                    <div class="alert alert-danger alert-dismissible fade show mb-5" role="alert">
+                        <div class="container">
+                            <?php echo e(session('convert-failed')); ?>
+
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        <?php elseif(session('admin-restricted')): ?>
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-12">
+                    <div class="alert alert-warning alert-dismissible fade show mb-5" role="alert">
+                        <div class="container">
+                            <?php echo e(session('admin-restricted')); ?>
+
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-3 col-12">
+                <div class="card rounded shadow-sm">
+                    <div class="card-body text-center p-2">
+                        WastePoin:
+                        <img src="<?php echo e(asset('images/points.svg')); ?>"> 
+                        <span class="align-middle fw-bold">
+                            <?php if(!Auth::user()->waste_poins == null): ?> <?php echo e(Auth::user()->waste_poins); ?> <?php else: ?> 0 <?php endif; ?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-12">
+                <form action="" method="POST">
+                    <?php echo csrf_field(); ?>
+                    <div class="mb-3">
+                        <label for="total_points" class="form-label fw-bolder">Jumlah poin</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="total_points" name="total_points" value="50" min="50" placeholder="Masukkan poin yang ingin ditukarkan" value="<?php echo e(old('total_points')); ?>">
+                            <span class="input-group-text">WastePoin</span>
+                            <?php $__errorArgs = ['total_points'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="text-danger mt-2">
+                                    <?php echo e($message); ?>
+
+                                </div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bank" class="form-label fw-bolder">Bank</label>
+                        <select class="form-select" id="bank" name="bank" aria-label="Default select example" value="<?php echo e(old('bank')); ?>">
+                            <option selected disabled>-- Pilih bank tujuan konversi --</option>
+                            <option value="Bank Mandiri">Bank Mandiri</option>
+                            <option value="Bank Negara Indonesia (BNI)">Bank Negara Indonesia (BNI)</option>
+                            <option value="Bank Tabungan Negara (BTN)">Bank Tabungan Negara (BTN)</option>
+                            <option value="Bank Rakyat Indonesia (BRI)">Bank Rakyat Indonesia (BRI)</option>
+                            <option value="Bank Syariah Indonesia (BSI)">Bank Syariah Indonesia (BSI)</option>
+                            <option value="Bank Central Asia (BCA)">Bank Central Asia (BCA)</option>
+                            <option value="Bank Niaga">Bank Niaga</option>
+                        </select>
+                        <?php $__errorArgs = ['bank'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="text-danger mt-2">
+                                <?php echo e($message); ?>
+
+                            </div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+                    <div class="mb-4">
+                        <label for="account_number" class="form-label fw-bolder">Nomor rekening</label>
+                        <input type="text" class="form-control" id="account_number" name="account_number" placeholder="Masukkan nomor rekening valid" value="<?php echo e(old('account_number')); ?>">
+                        <?php $__errorArgs = ['account_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="text-danger mt-2">
+                                <?php echo e($message); ?>
+
+                            </div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+                    <div class="mb-4">
+                        <button type="button" class="btn btn-green w-20 py-2 px-4 fw-bold rounded exchange" data-bs-toggle="modal" data-bs-target="#pointConvertModal">Konversi poin</button>                            
+                    </div>
+                    <div class="modal fade" id="pointConvertModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pointConvertModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold" id="pointConvertModalLabel">Konfirmasi Konversi Poin</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Apakah Anda yakin ingin melakukan penukaran poin? Anda tidak dapat melakukan pembatalan konversi poin.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-green">konversi poin</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\NoxxalsGod\Documents\Pemograman Website\pengelolaan-sampah-menumpuk\resources\views/penukaran/konversi_poin.blade.php ENDPATH**/ ?>
