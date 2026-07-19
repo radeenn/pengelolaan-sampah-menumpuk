@@ -10,8 +10,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you may specify which of the database connections below you wish
-    | to use as your default connection for all database work. Of course
-    | you may use many connections at once using the Database library.
+    | to use as your default connection for all database work.
     |
     */
 
@@ -22,14 +21,8 @@ return [
     | Database Connections
     |--------------------------------------------------------------------------
     |
-    | Here are each of the database connections setup for your application.
-    | Of course, examples of configuring each database platform that is
-    | supported by Laravel is shown below to make development simple.
-    |
-    |
-    | All database work in Laravel is done through the PHP PDO facilities
-    | so make sure you have the driver for your particular database of
-    | choice installed on your machine before you begin development.
+    | Here are each of the database connections configured for your
+    | application.
     |
     */
 
@@ -38,9 +31,15 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => env(
+                'DB_DATABASE',
+                database_path('database.sqlite')
+            ),
             'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+            'foreign_key_constraints' => env(
+                'DB_FOREIGN_KEYS',
+                true
+            ),
         ],
 
         'mysql' => [
@@ -58,9 +57,20 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+
+            /*
+             * Mendukung konstanta PDO MySQL untuk PHP lama
+             * sekaligus PHP 8.4 dan PHP 8.5.
+             */
+            'options' => extension_loaded('pdo_mysql')
+                ? array_filter([
+                    (
+                        defined('Pdo\\Mysql::ATTR_SSL_CA')
+                            ? constant('Pdo\\Mysql::ATTR_SSL_CA')
+                            : constant('PDO::MYSQL_ATTR_SSL_CA')
+                    ) => env('MYSQL_ATTR_SSL_CA'),
+                ])
+                : [],
         ],
 
         'pgsql' => [
@@ -98,9 +108,7 @@ return [
     | Migration Repository Table
     |--------------------------------------------------------------------------
     |
-    | This table keeps track of all the migrations that have already run for
-    | your application. Using this information, we can determine which of
-    | the migrations on disk haven't actually been run in the database.
+    | This table keeps track of all the migrations that have already run.
     |
     */
 
@@ -111,9 +119,7 @@ return [
     | Redis Databases
     |--------------------------------------------------------------------------
     |
-    | Redis is an open source, fast, and advanced key-value store that also
-    | provides a richer body of commands than a typical key-value system
-    | such as APC or Memcached. Laravel makes it easy to dig right in.
+    | Redis is an open source, fast, and advanced key-value store.
     |
     */
 
@@ -123,7 +129,13 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env(
+                'REDIS_PREFIX',
+                Str::slug(
+                    env('APP_NAME', 'laravel'),
+                    '_'
+                ).'_database_'
+            ),
         ],
 
         'default' => [
