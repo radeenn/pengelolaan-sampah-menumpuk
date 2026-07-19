@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-# WastePoint — Baseline Tim
 
-Project awal ini disiapkan oleh **Eno (Project Manager)**. Baseline belum berisi fitur final agar kontribusi backend dan frontend dapat masuk melalui branch anggota masing-masing.
-
-=======
->>>>>>> origin/fix/restore-laravel-core
 ## Tim
 
 | Anggota | Peran | Branch |
@@ -24,7 +18,3 @@ Project awal ini disiapkan oleh **Eno (Project Manager)**. Baseline belum berisi
 4. Backend user dan blog Rapid
 5. Frontend publik dan user Diana
 6. Frontend admin dan penukaran Rifa
-
-Setiap anggota harus meninjau file bagiannya, menjalankan pengujian, lalu commit dan push dari akun GitHub masing-masing.
-=======
->>>>>>> origin/fix/restore-laravel-core
